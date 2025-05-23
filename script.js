@@ -8,26 +8,24 @@ window.onload = function () {
 
   let provider, signer, contract;
 
-  document.getElementById('connectButton').onclick = async () => {
-    if (window.ethereum) {
-      provider = new ethers.BrowserProvider(window.ethereum);
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      signer = await provider.getSigner();
-      document.getElementById('walletAddress').innerText = "Wallet: " + signer.address;
-      contract = new ethers.Contract(contractAddress, abi, signer);
-    } else {
-      alert("Please install MetaMask");
-    }
-  };
+document.getElementById('connectButton').onclick = async () => {
+  if (window.ethereum) {
+    provider = new ethers.BrowserProvider(window.ethereum);
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+    signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    document.getElementById('walletAddress').innerText = "Wallet: " + address;
+    contract = new ethers.Contract(contractAddress, abi, signer);
 
-  document.getElementById('getBalance').onclick = async () => {
-    if (!contract) return alert("Connect wallet first.");
-    const balance = await contract.balanceOf(signer.address);
+    // Mostrar balance automáticamente al conectar wallet
+    const balance = await contract.balanceOf(address);
     const decimals = await contract.decimals();
     const formatted = ethers.formatUnits(balance, decimals);
-    console.log("Balance:", formatted); // 🧪 Para ver en consola
     document.getElementById('balance').innerText = `${formatted} MTJ`;
-  };
+  } else {
+    alert("Please install MetaMask");
+  }
+};
 
   document.getElementById('transferButton').onclick = async () => {
     if (!contract) return alert("Connect wallet first.");
