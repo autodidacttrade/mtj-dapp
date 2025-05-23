@@ -1,4 +1,4 @@
-const contractAddress = "0xbd6a3104146b2dFd8C47dBf91C02636e354a0c2c"; // dirección de tu contrato MTJ
+const contractAddress = "0xbd6a3104146b2dFd8C47dBf91C02636e354A0c2c";
 const abi = [
   "function balanceOf(address) view returns (uint256)",
   "function decimals() view returns (uint8)",
@@ -8,7 +8,11 @@ const abi = [
 let provider, signer, contract;
 
 document.getElementById('connectButton').onclick = async () => {
-  if (window.ethereum) {
+  try {
+    if (!window.ethereum) {
+      alert("Please install MetaMask");
+      return;
+    }
     provider = new ethers.BrowserProvider(window.ethereum);
     await window.ethereum.request({ method: 'eth_requestAccounts' });
     signer = await provider.getSigner();
@@ -21,27 +25,49 @@ document.getElementById('connectButton').onclick = async () => {
     const decimals = await contract.decimals();
     const formatted = ethers.formatUnits(balance, decimals);
     document.getElementById('balance').innerText = `${formatted} MTJ`;
-  } else {
-    alert("Please install MetaMask");
+  } catch (error) {
+    console.error("Error al conectar wallet o mostrar balance:", error);
+    alert("Error: " + error.message);
   }
 };
 
 document.getElementById('getBalance').onclick = async () => {
-  if (!contract) return alert("Connect wallet first.");
-  const address = await signer.getAddress();
-  const balance = await contract.balanceOf(address);
-  const decimals = await contract.decimals();
-  const formatted = ethers.formatUnits(balance, decimals);
-  document.getElementById('balance').innerText = `${formatted} MTJ`;
+  try {
+    if (!contract) {
+      alert("Connect wallet first.");
+      return;
+    }
+    const address = await signer.getAddress();
+    const balance = await contract.balanceOf(address);
+    const decimals = await contract.decimals();
+    const formatted = ethers.formatUnits(balance, decimals);
+    document.getElementById('balance').innerText = `${formatted} MTJ`;
+  } catch (error) {
+    console.error("Error al obtener balance:", error);
+    alert("Error: " + error.message);
+  }
 };
 
 document.getElementById('transferButton').onclick = async () => {
-  if (!contract) return alert("Connect wallet first.");
-  const to = document.getElementById('toAddress').value;
-  const amount = document.getElementById('amount').value;
-  const decimals = await contract.decimals();
-  const tx = await contract.transfer(to, ethers.parseUnits(amount, decimals));
-  alert("Transaction sent: " + tx.hash);
+  try {
+    if (!contract) {
+      alert("Connect wallet first.");
+      return;
+    }
+    const to = document.getElementById('toAddress').value;
+    const amount = document.getElementById('amount').value;
+    if (!to || !amount) {
+      alert("Please enter recipient address and amount.");
+      return;
+    }
+    const decimals = await contract.decimals();
+    const tx = await contract.transfer(to, ethers.parseUnits(amount, decimals));
+    alert("Transaction sent: " + tx.hash);
+  } catch (error) {
+    console.error("Error al enviar tokens:", error);
+    alert("Error: " + error.message);
+  }
 };
+
 
 
