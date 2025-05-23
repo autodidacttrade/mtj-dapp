@@ -1,12 +1,11 @@
-window.onload = function () {
-  const contractAddress = "0xbd6a3104146b2dFd8C47dBf91C02636e354A0c2c"; // reemplaza
-  const abi = [
-    "function balanceOf(address) view returns (uint256)",
-    "function decimals() view returns (uint8)",
-    "function transfer(address,uint256) returns (bool)"
-  ];
+const contractAddress = "0xbd6a3104146b2dFd8C47dBf91C02636e354a0c2c"; // dirección de tu contrato MTJ
+const abi = [
+  "function balanceOf(address) view returns (uint256)",
+  "function decimals() view returns (uint8)",
+  "function transfer(address,uint256) returns (bool)"
+];
 
-  let provider, signer, contract;
+let provider, signer, contract;
 
 document.getElementById('connectButton').onclick = async () => {
   if (window.ethereum) {
@@ -27,13 +26,22 @@ document.getElementById('connectButton').onclick = async () => {
   }
 };
 
-  document.getElementById('transferButton').onclick = async () => {
-    if (!contract) return alert("Connect wallet first.");
-    const to = document.getElementById('toAddress').value;
-    const amount = document.getElementById('amount').value;
-    const decimals = await contract.decimals();
-    const tx = await contract.transfer(to, ethers.parseUnits(amount, decimals));
-    alert("Transaction sent: " + tx.hash);
-  };
+document.getElementById('getBalance').onclick = async () => {
+  if (!contract) return alert("Connect wallet first.");
+  const address = await signer.getAddress();
+  const balance = await contract.balanceOf(address);
+  const decimals = await contract.decimals();
+  const formatted = ethers.formatUnits(balance, decimals);
+  document.getElementById('balance').innerText = `${formatted} MTJ`;
 };
+
+document.getElementById('transferButton').onclick = async () => {
+  if (!contract) return alert("Connect wallet first.");
+  const to = document.getElementById('toAddress').value;
+  const amount = document.getElementById('amount').value;
+  const decimals = await contract.decimals();
+  const tx = await contract.transfer(to, ethers.parseUnits(amount, decimals));
+  alert("Transaction sent: " + tx.hash);
+};
+
 
