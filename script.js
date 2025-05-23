@@ -1,5 +1,5 @@
 const contractAddress = "TU_DIRECCION_DEL_CONTRATO"; // reemplaza
-const abi = [ /* Pega aquí tu ABI del contrato */ ];
+const abi = [ 0xbd6a3104146b2dFd8C47dBf91C02636e354A0c2c ];
 
 let provider, signer, contract;
 
