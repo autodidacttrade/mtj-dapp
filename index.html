@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MTJ Token Wallet</title>
+</head>
+<body>
+  <h2>MTJ Token Interface</h2>
+  <button id="connectButton">Connect Wallet</button>
+  <p id="walletAddress">Wallet: </p>
+
+  <h3>Balance</h3>
+  <button id="getBalance">Check MTJ Balance</button>
+  <p id="balance">--</p>
+
+  <h3>Transfer MTJ</h3>
+  <input type="text" id="toAddress" placeholder="Recipient address" />
+  <input type="number" id="amount" placeholder="Amount" />
+  <button id="transferButton">Send MTJ</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.8.1/dist/ethers.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
