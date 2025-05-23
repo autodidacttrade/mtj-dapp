@@ -1,4 +1,4 @@
-const contractAddress = "0xbd6a3104146b2dFd8C47dBf91C02636e354A0c2c";
+const contractAddress = "0x8181aC4eE632Dd0a9Ce9380B07a8842B18001702";
 const abi = [
   "function balanceOf(address) view returns (uint256)",
   "function decimals() view returns (uint8)",
