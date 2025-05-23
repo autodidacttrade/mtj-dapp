@@ -68,6 +68,3 @@ document.getElementById('transferButton').onclick = async () => {
     alert("Error: " + error.message);
   }
 };
-
-
-
